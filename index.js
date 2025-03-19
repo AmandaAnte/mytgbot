@@ -14,7 +14,8 @@ bot.help((ctx) => {
     '/start - 开始使用机器人\n' +
     '/help - 显示帮助信息\n' +
     '/about - 关于此机器人\n' +
-    '/btc - 查询比特币价格'
+    '/btc - 查询比特币价格\n' +
+    '/eth - 查询以太坊价格'
   );
 });
 
@@ -37,6 +38,24 @@ bot.command('btc', async (ctx) => {
   } catch (error) {
     console.error('获取比特币价格失败:', error);
     ctx.reply('抱歉，无法获取比特币价格。请稍后再试。');
+  }
+});
+
+bot.command('eth', async (ctx) => {
+  try {
+    ctx.reply('正在查询以太坊价格，请稍候...');
+    
+    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd,cny');
+    const ethPrice = response.data.ethereum;
+    
+    const message = `⚡ 以太坊 (ETH) 当前价格:\n` +
+                   `💵 USD: $${ethPrice.usd.toLocaleString()}\n` +
+                   `💴 CNY: ¥${ethPrice.cny.toLocaleString()}`;
+    
+    ctx.reply(message);
+  } catch (error) {
+    console.error('获取以太坊价格失败:', error);
+    ctx.reply('抱歉，无法获取以太坊价格。请稍后再试。');
   }
 });
 

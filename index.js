@@ -15,7 +15,8 @@ bot.help((ctx) => {
     '/help - 显示帮助信息\n' +
     '/about - 关于此机器人\n' +
     '/btc - 查询比特币价格\n' +
-    '/eth - 查询以太坊价格'
+    '/eth - 查询以太坊价格\n' +
+    '/sol - 查询Solana价格'
   );
 });
 
@@ -56,6 +57,24 @@ bot.command('eth', async (ctx) => {
   } catch (error) {
     console.error('获取以太坊价格失败:', error);
     ctx.reply('抱歉，无法获取以太坊价格。请稍后再试。');
+  }
+});
+
+bot.command('sol', async (ctx) => {
+  try {
+    ctx.reply('正在查询Solana价格，请稍候...');
+    
+    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd,cny');
+    const solPrice = response.data.solana;
+    
+    const message = `☀️ Solana (SOL) 当前价格:\n` +
+                   `💵 USD: $${solPrice.usd.toLocaleString()}\n` +
+                   `💴 CNY: ¥${solPrice.cny.toLocaleString()}`;
+    
+    ctx.reply(message);
+  } catch (error) {
+    console.error('获取Solana价格失败:', error);
+    ctx.reply('抱歉，无法获取Solana价格。请稍后再试。');
   }
 });
 
